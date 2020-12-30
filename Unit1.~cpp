@@ -212,28 +212,25 @@ void __fastcall TForm1::showExellentStudentsClick(TObject *Sender)
 
     fclose(myFile);
 
-    if ((myFile = fopen(fileName.c_str(), "a+")) == NULL){
+
+    myFile = fopen("answer.txt", "w");
+    fclose (myFile);
+    if ((myFile = fopen("answer.txt", "a+")) == NULL){
     }
     else
     {
          fprintf(myFile, "\n------Exellent students----------\n");
          for(int j = 0; j < counter; j++)
          {
-             fprintf(myFile, "\n%s %d %d %d %d %d %d %lf\n", stArr[j].name, stArr[j].yearOfBirdth,
-             stArr[j].group, stArr[j].grades[0], stArr[j].grades[1], stArr[j].grades[2],
-             stArr[j].grades[3], stArr[j].avgGrade);
+             fprintf(myFile, "\n%s %d %d %d %d %d %d %lf\n",
+                      stArr[j].name, stArr[j].yearOfBirdth,
+                      stArr[j].group, stArr[j].grades[0],
+                      stArr[j].grades[1], stArr[j].grades[2],
+                      stArr[j].grades[3], stArr[j].avgGrade);
          }
     }
 
     fclose(myFile);
 }
 //---------------------------------------------------------------------------
-/*if ((myFile = fopen(fileName.c_str(), "a+")) == NULL){
-               }
-               else
-               {
-                 fprintf(myFile, "\n------Exellent students----------\n");
-                 printf("\n%s %d %d %d %d %d %d %lf\n", st.name, st.yearOfBirdth, st.group,
-                 st.grades[0], st.grades[1], st.grades[2], st.grades[3], st.avgGrade);
-               }
-               */
+
