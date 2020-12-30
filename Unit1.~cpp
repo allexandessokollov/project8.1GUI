@@ -62,6 +62,7 @@ void __fastcall TForm1::openFileClick(TObject *Sender)
 {
     OpenDialog1->Title = "Open file";
     student st;
+    int i = 0;
 
     if(OpenDialog1->Execute())
     {
@@ -73,14 +74,16 @@ void __fastcall TForm1::openFileClick(TObject *Sender)
         }
 
         Memo1->Lines->Add("--------all data--------");
-        while((fscanf(myFile, "%s %d %d %d %d %d %d %lf\n", &st.name,
+        while((fscanf(myFile, "%s %d %d %d %d %d %d %lf\n",
+             &st.name,
              &st.yearOfBirdth, &st.group,
              &st.grades[0], &st.grades[1], &st.grades[2],
              &st.grades[3], &st.avgGrade))!= EOF)
         {
 
 
-           Memo1->Lines->Add(AnsiString(st.name) + "    " + FloatToStr(st.avgGrade));
+           Memo1->Lines->Add(IntToStr(i++) + " " + AnsiString(st.name)
+           + "    " + FloatToStr(st.avgGrade));
         }
 
     }
@@ -231,6 +234,85 @@ void __fastcall TForm1::showExellentStudentsClick(TObject *Sender)
     }
 
     fclose(myFile);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::editDataClick(TObject *Sender)
+{
+    student st;
+    student stArr[STUDENT_ARRAY_SIZE];
+    int userChoice, counter = 0;
+
+    userChoice = StrToInt(Edit1->Text);
+
+    if ((myFile = fopen(fileName.c_str(), "r")) == NULL)
+    {
+        printf("\nCannot open file.\n");
+    }
+    else
+    {
+        while((fscanf(myFile, "%s %d %d %d %d %d %d %lf\n", &st.name,
+                  &st.yearOfBirdth, &st.group,
+                  &st.grades[0], &st.grades[1],
+                  &st.grades[2], &st.grades[3],
+                  &st.avgGrade))!= EOF)
+        {
+            Memo1->Lines->Add(IntToStr(counter) + " " +
+            AnsiString(st.name) + " " + IntToStr(st.yearOfBirdth)
+            + " " + IntToStr(st.group) + " " +  IntToStr(st.grades[0])
+            + " " + IntToStr(st.grades[1]) + " " + IntToStr(st.grades[2])
+            + " " + IntToStr(st.grades[3]) + " " + FloatToStr(st.avgGrade));
+
+            stArr[counter] = st;
+            counter++;
+        }
+    }
+
+    fclose (myFile);
+
+
+        AnsiString tempr =  SNP->Text;
+        strcpy(stArr[userChoice].name, tempr.c_str());
+        stArr[userChoice].yearOfBirdth = StrToInt(yearOfBirdth->Text);
+        stArr[userChoice].group = StrToInt(groupNumber->Text);
+        stArr[userChoice].grades[0] = StrToInt(physics->Text);
+        stArr[userChoice].grades[1] = StrToInt(math->Text);
+        stArr[userChoice].grades[2] = StrToInt(CS->Text);
+        stArr[userChoice].grades[3] = StrToInt(chemistry->Text);
+        stArr[userChoice].avgGrade = avgGrade(stArr[userChoice].grades);
+
+
+
+    myFile = fopen(fileName.c_str(), "w");
+    fclose (myFile);
+
+    myFile = fopen(fileName.c_str(), "a+");
+
+    for(int i = 0; i < counter; i++)
+    {
+        fprintf(myFile, "%s %d %d %d %d %d %d %f\n", stArr[i].name,
+                stArr[i].yearOfBirdth, stArr[i].group,
+                stArr[i].grades[0], stArr[i].grades[1],
+                stArr[i].grades[2], stArr[i].grades[3], stArr[i].avgGrade);
+    }
+
+    fclose (myFile);
+
+    Memo1->Lines->Add("Edited! Result:\n\n");
+
+    for(int i = 0; i < counter; i++)
+    {
+            Memo1->Lines->Add(AnsiString(stArr[i].name) + " " +
+            IntToStr(stArr[i].yearOfBirdth)
+            + " " + IntToStr(stArr[i].group) + " " +
+            IntToStr(stArr[i].grades[0])
+            + " " + IntToStr(stArr[i].grades[1]) + " " +
+            IntToStr(stArr[i].grades[2])
+            + " " + IntToStr(stArr[i].grades[3]) + " " +
+            FloatToStr(stArr[i].avgGrade));
+    }
+
+    printf("\n\n");
 }
 //---------------------------------------------------------------------------
 

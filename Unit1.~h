@@ -33,10 +33,13 @@ __published:	// IDE-managed Components
         TButton *openFile;
         TButton *add;
         TButton *showExellentStudents;
+        TButton *editData;
+        TEdit *Edit1;
         void __fastcall createFileClick(TObject *Sender);
         void __fastcall openFileClick(TObject *Sender);
         void __fastcall addClick(TObject *Sender);
         void __fastcall showExellentStudentsClick(TObject *Sender);
+        void __fastcall editDataClick(TObject *Sender);
 private:
         float avgGrade(int arr[]);
         bool checkEdits();	// User declarations

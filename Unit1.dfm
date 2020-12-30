@@ -129,7 +129,7 @@ object Form1: TForm1
   end
   object createFile: TButton
     Left = 488
-    Top = 424
+    Top = 448
     Width = 249
     Height = 33
     Caption = 'Create file'
@@ -138,7 +138,7 @@ object Form1: TForm1
   end
   object openFile: TButton
     Left = 488
-    Top = 384
+    Top = 408
     Width = 249
     Height = 33
     Caption = 'Open File'
@@ -162,6 +162,23 @@ object Form1: TForm1
     Caption = 'show Exellent Students'
     TabOrder = 11
     OnClick = showExellentStudentsClick
+  end
+  object editData: TButton
+    Left = 488
+    Top = 336
+    Width = 201
+    Height = 33
+    Caption = 'Edit element'
+    TabOrder = 12
+    OnClick = editDataClick
+  end
+  object Edit1: TEdit
+    Left = 704
+    Top = 336
+    Width = 33
+    Height = 32
+    TabOrder = 13
+    Text = '0'
   end
   object OpenDialog1: TOpenDialog
     Filter = 'text files|*.txt|all files|*.*'
