@@ -48,13 +48,13 @@ void __fastcall TForm1::createFileClick(TObject *Sender)
         if ((myFile = fopen(fileName.c_str(), "w")) == NULL)
         {
                 ShowMessage("\nCannot create file.\n");
-                return;
+        }
+        else
+        {
+            Memo1->Lines->Add("file " + AnsiString(fileName) + " created!");
+            fclose(myFile);
         }
     }
-    
-    Memo1->Lines->Add("file " + AnsiString(fileName) + " created!");
-
-    fclose(myFile);
 
 }
 //---------------------------------------------------------------------------
@@ -70,25 +70,28 @@ void __fastcall TForm1::openFileClick(TObject *Sender)
         if((myFile = fopen(fileName.c_str(), "r")) == NULL)
         {
             ShowMessage("Cannot open file");
-            return;
-        }
 
-        Memo1->Lines->Add("--------all data--------");
-        while((fscanf(myFile, "%s %d %d %d %d %d %d %lf\n",
-             &st.name,
-             &st.yearOfBirdth, &st.group,
-             &st.grades[0], &st.grades[1], &st.grades[2],
-             &st.grades[3], &st.avgGrade))!= EOF)
+        }
+        else
         {
 
+            Memo1->Lines->Add("--------all data--------");
+            while((fscanf(myFile, "%s %d %d %d %d %d %d %lf\n",
+                 &st.name,
+                 &st.yearOfBirdth, &st.group,
+                 &st.grades[0], &st.grades[1], &st.grades[2],
+                 &st.grades[3], &st.avgGrade))!= EOF)
+            {
 
-           Memo1->Lines->Add(IntToStr(i++) + " " + AnsiString(st.name)
-           + "    " + FloatToStr(st.avgGrade));
-        }
+
+               Memo1->Lines->Add(IntToStr(i++) + " " + AnsiString(st.name)
+               + "    " + FloatToStr(st.avgGrade));
+             }
+
+             fclose(myFile);
+          }
 
     }
-
-     fclose(myFile);
 }
 //---------------------------------------------------------------------------
 
@@ -136,9 +139,11 @@ void __fastcall TForm1::addClick(TObject *Sender)
         fprintf(myFile, "%s %d %d %d %d %d %d %f\n", temp.name, temp.yearOfBirdth,
                  temp.group, temp.grades[0], temp.grades[1],
                  temp.grades[2], temp.grades[3], temp.avgGrade);
+
+         fclose(myFile);
     }
 
-    fclose(myFile);
+    
 }
 //---------------------------------------------------------------------------
 
@@ -189,35 +194,47 @@ void __fastcall TForm1::showExellentStudentsClick(TObject *Sender)
 {
         student st;
         student stArr[STUDENT_ARRAY_SIZE];
+        int counter = 0;
         
         fileName = OpenDialog1->FileName;
         if((myFile = fopen(fileName.c_str(), "r+")) == NULL)
         {
             ShowMessage("Cannot open file");
-            return;
-        }
-        int counter = 0;
 
-        Memo1->Lines->Add("--------Exellent Students--------\n");
-        while((fscanf(myFile, "%s %d %d %d %d %d %d %lf\n", &st.name,
-             &st.yearOfBirdth, &st.group,
-             &st.grades[0], &st.grades[1], &st.grades[2],
-             &st.grades[3], &st.avgGrade))!= EOF)
+        }
+        else
         {
 
-           if(st.avgGrade == 8 || st.avgGrade == 9 || st.avgGrade == 10)
-           {
-               stArr[counter++] = st;
-               Memo1->Lines->Add(AnsiString(st.name) + "    " + FloatToStr(st.avgGrade));
+            Memo1->Lines->Add("--------Exellent Students--------\n");
+            while((fscanf(myFile, "%s %d %d %d %d %d %d %lf\n", &st.name,
+                 &st.yearOfBirdth, &st.group,
+                 &st.grades[0], &st.grades[1], &st.grades[2],
+                 &st.grades[3], &st.avgGrade))!= EOF)
+            {
 
-           }
+                  if(st.avgGrade == 8 || st.avgGrade == 9 || st.avgGrade == 10)
+                  {
+                      stArr[counter++] = st;
+                      Memo1->Lines->Add(AnsiString(st.name) + "    " + FloatToStr(st.avgGrade));
+
+                   }
+             }
+
+             fclose(myFile);
         }
 
-    fclose(myFile);
 
 
-    myFile = fopen("answer.txt", "w");
-    fclose (myFile);
+    FILE *answerFile;
+    if((answerFile = fopen("answer.txt", "w")) == NULL)
+    {
+        ShowMessage("Can't create answer file!");
+    }
+    else
+    {
+        fclose (answerFile);
+    }
+
     if ((myFile = fopen("answer.txt", "a+")) == NULL){
     }
     else
@@ -231,9 +248,9 @@ void __fastcall TForm1::showExellentStudentsClick(TObject *Sender)
                       stArr[j].grades[1], stArr[j].grades[2],
                       stArr[j].grades[3], stArr[j].avgGrade);
          }
+        fclose(myFile);
     }
 
-    fclose(myFile);
 }
 //---------------------------------------------------------------------------
 
@@ -266,9 +283,11 @@ void __fastcall TForm1::editDataClick(TObject *Sender)
             stArr[counter] = st;
             counter++;
         }
+
+        fclose (myFile);
     }
 
-    fclose (myFile);
+    
 
 
         AnsiString tempr =  SNP->Text;
@@ -283,21 +302,33 @@ void __fastcall TForm1::editDataClick(TObject *Sender)
 
 
 
-    myFile = fopen(fileName.c_str(), "w");
-    fclose (myFile);
-
-    myFile = fopen(fileName.c_str(), "a+");
-
-    for(int i = 0; i < counter; i++)
+    if((myFile = fopen(fileName.c_str(), "w")) == NULL)
     {
-        fprintf(myFile, "%s %d %d %d %d %d %d %f\n", stArr[i].name,
-                stArr[i].yearOfBirdth, stArr[i].group,
-                stArr[i].grades[0], stArr[i].grades[1],
-                stArr[i].grades[2], stArr[i].grades[3], stArr[i].avgGrade);
+        ShowMessage("rewriting error!");
+    }
+    else
+    {
+        fclose (myFile);
     }
 
-    fclose (myFile);
+    if((myFile = fopen(fileName.c_str(), "a+")) == NULL)
+    {
+        ShowMessage("Can't save data to file!");
+    }
+    else
+    {
 
+        for(int i = 0; i < counter; i++)
+        {
+            fprintf(myFile, "%s %d %d %d %d %d %d %f\n", stArr[i].name,
+                    stArr[i].yearOfBirdth, stArr[i].group,
+                    stArr[i].grades[0], stArr[i].grades[1],
+                    stArr[i].grades[2], stArr[i].grades[3], stArr[i].avgGrade);
+        }
+        fclose (myFile);
+     }
+    
+    Memo1->Clear();
     Memo1->Lines->Add("Edited! Result:\n\n");
 
     for(int i = 0; i < counter; i++)
@@ -312,7 +343,7 @@ void __fastcall TForm1::editDataClick(TObject *Sender)
             FloatToStr(stArr[i].avgGrade));
     }
 
-    printf("\n\n");
+
 }
 //---------------------------------------------------------------------------
 

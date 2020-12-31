@@ -20,9 +20,6 @@ __published:	// IDE-managed Components
         TLabel *Edit3;
         TEdit *groupNumber;
         TLabel *Label3;
-        TLabel *Label4;
-        TLabel *Label5;
-        TLabel *Label6;
         TEdit *chemistry;
         TEdit *physics;
         TEdit *CS;
